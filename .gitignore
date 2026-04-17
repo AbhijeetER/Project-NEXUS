@@ -1,4 +1,6 @@
 *.tar
+*.pt
+*.bin
 __pycache__/
 *.pyc
 .env

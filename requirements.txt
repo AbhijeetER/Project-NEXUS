@@ -1,8 +1,20 @@
-fastapi
-uvicorn[standard]
-torch
-transformers
-peft
-tiktoken
-pydantic
-sentencepiece
+# ============================================================
+# Project NEXUS — Python 3.10 dependencies
+# ============================================================
+
+# --- API ---
+fastapi>=0.110.0,<1.0.0
+uvicorn[standard]>=0.29.0,<1.0.0
+pydantic>=2.6.0,<3.0.0
+
+# --- Model / inference ---
+torch>=2.2.0,<3.0.0
+transformers>=4.40.0,<5.0.0
+peft>=0.10.0,<1.0.0
+tiktoken>=0.6.0,<1.0.0
+sentencepiece>=0.2.0,<1.0.0
+
+# --- RAG: embedding generation + vector search ---
+sentence-transformers>=2.7.0,<3.0.0   # all-MiniLM-L6-v2; requires Python >=3.9
+faiss-cpu>=1.8.0,<2.0.0               # CPU-only FAISS; swap for faiss-gpu on CUDA hosts
+numpy>=1.26.0,<2.0.0                  # <2.0 keeps torch / faiss ABI compatible on Py3.10
