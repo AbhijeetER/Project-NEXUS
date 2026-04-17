@@ -1,0 +1,50 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# ── Virtual environments ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Model weights (large binaries — mount or download at runtime) ──────────────
+*.pt
+*.bin
+*.ckpt
+*.safetensors
+*.gguf
+*.tar
+*.tar.gz
+*.zip
+
+# ── Node / Frontend ───────────────────────────────────────────────────────────
+node_modules/
+nexus-frontend/node_modules/
+*.msi
+
+# ── Git & IDE ─────────────────────────────────────────────────────────────────
+.git/
+.gitignore
+.vscode/
+*.code-workspace
+
+# ── Secrets & environment ─────────────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+
+# ── Test & dev artifacts ──────────────────────────────────────────────────────
+test_*.py
+*_test.py
+debug_*.py
+
+# ── Misc ──────────────────────────────────────────────────────────────────────
+*.log
+*.tmp
+README*
+Dockerfile*
+.dockerignore
