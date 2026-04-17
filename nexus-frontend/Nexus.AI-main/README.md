@@ -1,0 +1,3 @@
+This project is an indie developed LLM and agentic AI with self made architecture and showcased through a React App.
+
+More details to be added later...... 
