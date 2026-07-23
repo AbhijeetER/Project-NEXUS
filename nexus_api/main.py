@@ -2,10 +2,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 import os
-import torch
-
-from transformers import AutoTokenizer, AutoModelForCausalLM
-from peft import PeftModel
+import json
+import urllib.request
 from fastapi.middleware.cors import CORSMiddleware
 
 # --- RAG integration ---
@@ -35,42 +33,39 @@ app.add_middleware(
 
 
 # -----------------------------
-# Device configuration
+# OpenRouter configuration & Fallback Model loading
 # -----------------------------
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/free")
 
+device = None
+tokenizer = None
+model = None
 
-# -----------------------------
-# Model path  (absolute, anchored to this file's location)
-# -----------------------------
-MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "nexus_lora2")
+if not OPENROUTER_API_KEY:
+    print(">>> No OPENROUTER_API_KEY detected in environment. Loading local GPT-2 + LoRA model...")
+    import torch
+    from transformers import AutoTokenizer, AutoModelForCausalLM
+    from peft import PeftModel
 
-
-# -----------------------------
-# Load tokenizer
-# -----------------------------
-tokenizer = AutoTokenizer.from_pretrained(
-    MODEL_PATH,
-    use_fast=True
-)
-
-
-# -----------------------------
-# Load base GPT-2
-# -----------------------------
-base_model = AutoModelForCausalLM.from_pretrained(
-    "gpt2",
-    torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
-)
-
-
-# -----------------------------
-# Attach LoRA adapter
-# -----------------------------
-model = PeftModel.from_pretrained(base_model, MODEL_PATH)
-
-model.to(device)
-model.eval()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "nexus_lora2")
+    
+    tokenizer = AutoTokenizer.from_pretrained(
+        MODEL_PATH,
+        use_fast=True
+    )
+    
+    base_model = AutoModelForCausalLM.from_pretrained(
+        "gpt2",
+        torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
+    )
+    
+    model = PeftModel.from_pretrained(base_model, MODEL_PATH)
+    model.to(device)
+    model.eval()
+else:
+    print(f">>> OPENROUTER_API_KEY detected. Generation will run via OpenRouter API with model: {OPENROUTER_MODEL}")
 
 
 # -----------------------------
@@ -103,9 +98,59 @@ def home():
 
 
 # -----------------------------
-# Internal generation helper
+# Internal generation helpers
 # -----------------------------
+def _generate_openrouter(prompt: str, api_key: str, model_name: str) -> str:
+    """Send prompt to OpenRouter API and return text response."""
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://github.com/project-nexus",
+        "X-Title": "Project NEXUS"
+    }
+    
+    # We pass the full built context prompt directly as user prompt
+    system_instruction = "\n\n[Instruction: Keep your response concise and under 10 lines.]"
+    data = {
+        "model": model_name,
+        "messages": [
+            {"role": "user", "content": prompt + system_instruction}
+        ],
+        "max_tokens": 150
+    }
+    
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(data).encode("utf-8"),
+        headers=headers,
+        method="POST"
+    )
+    
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            res_data = json.loads(response.read().decode("utf-8"))
+            
+            choices = res_data.get("choices")
+            if not choices:
+                return f"Error: No choices returned by OpenRouter API. Details: {json.dumps(res_data)}"
+                
+            message = choices[0].get("message", {})
+            content = message.get("content")
+            if content is None:
+                return f"Error: Received null content from OpenRouter API. Details: {json.dumps(res_data)}"
+                
+            return content.strip()
+    except Exception as e:
+        print(f"OpenRouter Request Error: {e}")
+        return f"Error connecting to OpenRouter model: {str(e)}"
+
+
 def _generate_response(prompt: str) -> str:
+    """Generate response using OpenRouter API or local fallback model."""
+    if OPENROUTER_API_KEY:
+        return _generate_openrouter(prompt, OPENROUTER_API_KEY, OPENROUTER_MODEL)
+
     """Tokenize *prompt*, run the LoRA model, and return the decoded response."""
     formatted = f"""### Instruction:
 {prompt}

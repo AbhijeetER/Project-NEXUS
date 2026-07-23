@@ -10,6 +10,8 @@ services:
       - ALLOWED_ORIGINS=*
       - TOKENIZERS_PARALLELISM=false
       - NEXUS_MEMORY_DIR=/home/nexus/app/memory_data
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-meta-llama/llama-3-8b-instruct:free}
     volumes:
       - nexus_memory_store:/home/nexus/app/memory_data
     restart: always
