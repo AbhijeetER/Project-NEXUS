@@ -11,6 +11,8 @@ FAISS index     : IndexFlatL2        (exact L2 nearest-neighbour search)
 
 from __future__ import annotations
 
+import os
+import json
 from typing import TypedDict
 
 import numpy as np
@@ -221,6 +223,32 @@ class MemoryStore:
     def size(self) -> int:
         """Number of Knowledge Seeds currently in the store."""
         return self._index.ntotal
+
+    # ------------------------------------------------------------------
+    # Persistence API
+    # ------------------------------------------------------------------
+
+    def save_to_disk(self, directory: str) -> None:
+        """Save FAISS index and seeds metadata to disk."""
+        os.makedirs(directory, exist_ok=True)
+        faiss_path = os.path.join(directory, "memory_index.faiss")
+        seeds_path = os.path.join(directory, "memory_seeds.json")
+
+        faiss.write_index(self._index, faiss_path)
+        with open(seeds_path, "w", encoding="utf-8") as f:
+            json.dump(self._seeds, f, ensure_ascii=False, indent=2)
+
+    def load_from_disk(self, directory: str) -> bool:
+        """Load FAISS index and seeds metadata from disk if available."""
+        faiss_path = os.path.join(directory, "memory_index.faiss")
+        seeds_path = os.path.join(directory, "memory_seeds.json")
+
+        if os.path.exists(faiss_path) and os.path.exists(seeds_path):
+            self._index = faiss.read_index(faiss_path)
+            with open(seeds_path, "r", encoding="utf-8") as f:
+                self._seeds = json.load(f)
+            return True
+        return False
 
     # ------------------------------------------------------------------
     # Internals

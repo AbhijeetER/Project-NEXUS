@@ -28,7 +28,7 @@ COPY requirements.txt .
 # Install all Python deps into an isolated prefix so we can copy
 # them cleanly into the final stage without carrying build tools.
 RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir --prefix=/install -r requirements.txt
+ && pip install --no-cache-dir --prefix=/install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
 
 # ---- Stage 2: runtime image ----

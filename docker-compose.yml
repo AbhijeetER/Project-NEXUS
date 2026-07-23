@@ -1,0 +1,31 @@
+services:
+  nexus-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ALLOWED_ORIGINS=*
+      - TOKENIZERS_PARALLELISM=false
+      - NEXUS_MEMORY_DIR=/home/nexus/app/memory_data
+    volumes:
+      - nexus_memory_store:/home/nexus/app/memory_data
+    restart: always
+
+  nexus-frontend:
+    build:
+      context: ./nexus-frontend/Nexus.AI-main
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:8000
+    container_name: nexus_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - nexus-backend
+    restart: always
+
+volumes:
+  nexus_memory_store:

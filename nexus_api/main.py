@@ -22,9 +22,12 @@ app = FastAPI(title="Project NEXUS API")
 # -----------------------------
 # Enable CORS
 # -----------------------------
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
+allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,9 +74,12 @@ model.eval()
 
 
 # -----------------------------
-# Global MemoryStore instance
+# Global MemoryStore instance & persistence
 # -----------------------------
+MEMORY_DIR = os.getenv("NEXUS_MEMORY_DIR")
 memory_store = MemoryStore()
+if MEMORY_DIR:
+    memory_store.load_from_disk(MEMORY_DIR)
 
 
 # -----------------------------
@@ -154,5 +160,7 @@ def ask(request: AskRequest):
 
     # 4. Store the interaction back into memory for future retrievals
     memory_store.add(query=request.query, response=response)
+    if MEMORY_DIR:
+        memory_store.save_to_disk(MEMORY_DIR)
 
     return {"response": response}

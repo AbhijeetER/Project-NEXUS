@@ -58,8 +58,7 @@ def generate(prompt: str) -> str:
     return decoded
 
 
-# ── Chat loop ─────────────────────────────────────────────
-print("  NEXUS is ready. Type your query below (Ctrl+C to quit).\n")
+
 print("-" * 60)
 
 while True:
@@ -108,4 +107,6 @@ while True:
     print(f"    embedding  : [{stored['embedding'][0]:.4f}, {stored['embedding'][1]:.4f}, ...]  (384 dims)")
     print(f"    total seeds in memory : {memory.size}")
 
-    print("-" * 60)
+    
+    print("-" * 60,flush =True)
+    print(f"    Final output: {stored['output']}", flush=True)

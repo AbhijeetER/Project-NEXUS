@@ -11,14 +11,17 @@ Run from project root:
 import sys
 import os
 
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from nexus.memory.memory_store import MemoryStore
 from nexus.rag.rag_pipeline import build_prompt
 
-PASS = "\033[92m✔  PASS\033[0m"
-FAIL = "\033[91m✖  FAIL\033[0m"
-SEP  = "─" * 60
+PASS = "[PASS]" if sys.platform == "win32" and not sys.stdout.isatty() else "\033[92m✔  PASS\033[0m"
+FAIL = "[FAIL]" if sys.platform == "win32" and not sys.stdout.isatty() else "\033[91m✖  FAIL\033[0m"
+SEP  = "-" * 60
 
 
 def check(description: str, condition: bool) -> bool:

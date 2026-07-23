@@ -1,4 +1,3 @@
-#Implementing a Compact Self Attention
 import torch.nn as nn
 import torch
 import torch.nn.functional as F

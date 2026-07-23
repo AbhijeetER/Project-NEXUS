@@ -14,11 +14,13 @@ env/
 *.pt
 *.bin
 *.ckpt
-*.safetensors
 *.gguf
 *.tar
 *.tar.gz
 *.zip
+*.msi
+nexus-frontend/
+!nexus_lora2/adapter_model.safetensors
 
 # ── Node / Frontend ───────────────────────────────────────────────────────────
 node_modules/
