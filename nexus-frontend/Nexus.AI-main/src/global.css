@@ -1,99 +1,171 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700&display=swap');
 @import "tailwindcss";
 
+/* ─── Design Tokens ─────────────────────────────────────── */
+:root {
+  --bg-base:       #0b0f1a;
+  --bg-surface:    #111827;
+  --bg-elevated:   #1a2235;
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --text-primary:  #e8eaf0;
+  --text-secondary:#8b93a8;
+  --text-muted:    #4f5c72;
+  --accent:        #4a6fa5;       /* desaturated steel-blue — no neon */
+  --accent-dim:    rgba(74,111,165,0.18);
+  --radius-card:   14px;
+}
 
+/* ─── Base ───────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Sora', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Typography helpers ─────────────────────────────────── */
+.font-sora { font-family: 'Sora', sans-serif; }
+
+/* ─── Loader / fade-out (preserved) ─────────────────────── */
+@keyframes fadeOut {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+.animate-fadeOut {
+  animation: fadeOut 0.5s ease-out forwards;
+  animation-delay: 1.5s;
+}
+
+/* ─── Background ripple (preserved for Boxes) ───────────── */
 @theme inline {
-    --animate-cell-ripple: cell-ripple var(--duration, 200ms) ease-out none 1
-      var(--delay, 0ms);
-  
-    @keyframes cell-ripple {
-      0% {
-        opacity: 0.4;
-      }
-      50% {
-        opacity: 0.8;
-      }
-      100% {
-        opacity: 0.4;
-      }
-    }
+  --animate-cell-ripple: cell-ripple var(--duration, 200ms) ease-out none 1 var(--delay, 0ms);
+
+  @keyframes cell-ripple {
+    0%   { opacity: 0.4; }
+    50%  { opacity: 0.8; }
+    100% { opacity: 0.4; }
   }
-  @keyframes fadeOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-  
-  .animate-fadeOut {
-    animation: fadeOut 0.5s ease-out forwards;
-    animation-delay: 1.5s; /* Loader stays for 2 seconds total */
-  }
-  
-  .font-sora {
-    font-family: 'Sora', sans-serif;
-  }
-  .neon-text {
-    text-shadow:
-      0 0 6px rgba(0, 255, 255, 0.6),
-      0 0 12px rgba(0, 255, 255, 0.5),
-      0 0 24px rgba(0, 255, 255, 0.4);
-    transition: transform 0.3s ease, text-shadow 0.3s ease;
-  }
-  
-  .neon-text-hover:hover {
-    transform: scale(1.1);
-    text-shadow:
-      0 0 8px rgba(0, 255, 255, 1),
-      0 0 16px rgba(0, 255, 255, 0.9),
-      0 0 32px rgba(0, 255, 255, 0.8);
-  }
-  
-  .font-sora {
-    font-family: 'Sora', sans-serif;
-  }
-  .timeline-img {
-    border-radius: 14px;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
-    box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
-  }
-  
-  .timeline-img:hover {
-    transform: scale(1.03);
-    box-shadow:
-      0 0 10px rgba(0, 255, 255, 0.5),
-      0 0 20px rgba(0, 255, 255, 0.4);
-  }
-  .timeline-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 2.5rem;
-  }
-  
-  .timeline-text {
-    flex: 1;
-  }
-  
-  .timeline-image-wrapper {
-    flex: 1;
-    max-width: 420px;
-    height: 260px;
-  }
-  .neon-small {
-    text-shadow:
-      0 0 4px rgba(0, 255, 255, 0.5),
-      0 0 8px rgba(0, 255, 255, 0.4);
-    transition: transform 0.28s ease, text-shadow 0.28s ease;
-  }
-  
-  .neon-small:hover {
-    transform: scale(1.05);
-    text-shadow:
-      0 0 6px rgba(0, 255, 255, 0.85),
-      0 0 14px rgba(0, 255, 255, 0.75),
-      0 0 26px rgba(0, 255, 255, 0.7);
-  }
-  
+}
+
+/* ─── Scroll-reveal animations ───────────────────────────── */
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes revealFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Base state: invisible until IntersectionObserver fires */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+/* Class added by JS when element enters viewport */
+.reveal.is-visible {
+  animation: revealUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Stagger delay variants (0–6) */
+.reveal-d0  { animation-delay: 0ms; }
+.reveal-d1  { animation-delay: 80ms; }
+.reveal-d2  { animation-delay: 160ms; }
+.reveal-d3  { animation-delay: 240ms; }
+.reveal-d4  { animation-delay: 320ms; }
+.reveal-d5  { animation-delay: 400ms; }
+.reveal-d6  { animation-delay: 480ms; }
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-elevated) 25%,
+    #202c41 50%,
+    var(--bg-elevated) 75%
+  );
+  background-size: 1200px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-card);
+}
+
+/* ─── Timeline image ─────────────────────────────────────── */
+.timeline-img {
+  border-radius: var(--radius-card);
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+.timeline-img:hover {
+  transform: scale(1.025);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Timeline layout helpers ────────────────────────────── */
+.timeline-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+.timeline-text { flex: 1; }
+.timeline-image-wrapper {
+  flex: 1;
+  max-width: 420px;
+  height: 260px;
+}
+
+/* ─── Card surface (matte, no glass) ────────────────────── */
+.card-matte {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-matte:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Accent pill / badge ────────────────────────────────── */
+.badge-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: var(--accent-dim);
+  color: #7ea8d8;
+  border: 1px solid rgba(74,111,165,0.3);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Divider ────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 0 auto;
+}
+
+/* ─── Nav glass (used only in FloatingPillNavbar) ─────────── */
+.nav-glass {
+  background: rgba(11, 15, 26, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255,255,255,0.04) inset;
+}
