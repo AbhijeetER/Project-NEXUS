@@ -65,7 +65,7 @@ export const Footer = () => {
 
           {/* GitHub Link */}
           <a
-            href="https://github.com/your-repo-link-here"
+            href="https://github.com/AbhijeetER/Project-NEXUS"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-3 text-gray-400 hover:text-cyan-400 transition-all duration-300"
