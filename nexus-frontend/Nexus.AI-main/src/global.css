@@ -138,6 +138,35 @@ body {
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
 }
 
+/* ─── Card Metallic Sheen / Hover Shine Effect ───────────── */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 42%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 58%,
+    transparent 100%
+  );
+  transform: translateX(-100%) rotate(25deg);
+  transition: transform 0.75s ease-in-out;
+  pointer-events: none;
+  z-index: 10;
+}
+.card-shine:hover::after {
+  transform: translateX(100%) rotate(25deg);
+}
+
 /* ─── Accent pill / badge ────────────────────────────────── */
 .badge-accent {
   display: inline-flex;

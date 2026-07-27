@@ -103,7 +103,7 @@ export default function Tabs() {
             return (
               <CardReveal key={i} delay={i + 1}>
                 <div
-                  className="card-matte h-full flex flex-col gap-5 p-6 group"
+                  className="card-matte card-shine h-full flex flex-col gap-5 p-6 group"
                 >
                   {/* Top row: icon + tag */}
                   <div className="flex items-center justify-between">
