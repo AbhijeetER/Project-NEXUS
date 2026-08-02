@@ -11,47 +11,47 @@ import "../src/global.css";
 
 
 const teamMembers = [
-  { 
+  {
     id: 1,
-    name: "Suryash Khare", 
+    name: "Suryash Khare",
     designation: "LLM architect",
-    image: "https://cdn.pixabay.com/photo/2018/06/17/20/35/chain-3481377_1280.jpg",
+    image: "https://media.licdn.com/dms/image/v2/D5635AQH-InUIpPjFbQ/profile-framedphoto-shrink_800_800/B56Z3HD5UfHgAg-/0/1777161180735?e=1785772800&v=beta&t=p6L3uF-FIKhAHZ-ku3pN84UFBfoNmdndGkIywcWne4w",
     linkedin: "https://in.linkedin.com/in/suryansh-khare-5a95b3215"
   },
-  { 
+  {
     id: 2,
-    name: "Rishabh Srivastava", 
+    name: "Rishabh Srivastava",
     designation: "ML Engineer",
-    image: "https://avatar.iran.liara.run/public/31",
+    image: "https://media.licdn.com/dms/image/v2/D5635AQGD3a_R4hGxeg/profile-framedphoto-shrink_800_800/profile-framedphoto-shrink_800_800/0/1734189996388?e=1785772800&v=beta&t=ODcVz1h3f_WdeaZVEz2ZDTtD_UUMT0JgYJ-Lt4_ZOlM",
     linkedin: "https://www.linkedin.com/in/rishabh-srivastava-796b60244/ "
   },
-  { 
+  {
     id: 3,
-    name: "Sarvpreet Kaur", 
+    name: "Sarvpreet Kaur",
     designation: "Research",
-    image: "https://avatar.iran.liara.run/public/64",
+    image: "https://media.licdn.com/dms/image/v2/D5603AQEoFjO6ANwXkw/profile-displayphoto-crop_800_800/B56Z8zEgm_IQAI-/0/1783268248972?e=1786579200&v=beta&t=mj5WyUeMgTL1j0k1x9q8-oR2KGVLC-h14uZKKJ3SLyI",
     linkedin: "https://www.linkedin.com/in/sarvpreet-kaur-a230702a1/ "
   },
-  { 
+  {
     id: 4,
-    name: "Priyanshu Kumar", 
+    name: "Priyanshu Kumar",
     designation: "AgentAI head",
-    image: "https://avatar.iran.liara.run/public/3",
+    image: "https://media.licdn.com/dms/image/v2/D5603AQGqfDFCGRCbYw/profile-displayphoto-crop_800_800/B56ZyYMLrnKUAI-/0/1772079860730?e=1786579200&v=beta&t=snJ7AdGR1k5sKdJOmU2o7Nxopg6bl7FL6HuDVcC8MGk",
     linkedin: "https://www.linkedin.com/in/priyanshu-kumar-980b50179/ "
   },
-  { 
+  {
     id: 5,
-    name: "Abhijeet", 
+    name: "Abhijeet",
     designation: "UI and Frontend",
-    image: "https://avatar.iran.liara.run/public/28",
-    linkedin: "https://linkedin.com/in/research-example"
+    image: "https://media.licdn.com/dms/image/v2/D5635AQHrQSxuu2ggUQ/profile-framedphoto-shrink_800_800/B56Z2Bp8OtKgAg-/0/1775996749126?e=1785772800&v=beta&t=y0ttLnVyhx7RpZmW9wYDg8vzJHL7WKUDuL9cl0Mx_Pw",
+    linkedin: "https://www.linkedin.com/in/jeetabhig/"
   }
 ];
 
 export const Footer = () => {
   return (
     <footer className="relative overflow-visible bg-gray-900 border-t border-gray-700 text-gray-300">
-      
+
       {/* Background Boxes */}
       <div className="absolute inset-0 w-full h-full">
         <Boxes />
@@ -65,7 +65,7 @@ export const Footer = () => {
 
           {/* GitHub Link */}
           <a
-            href="https://github.com/your-repo-link-here"
+            href="https://github.com/AbhijeetER/Project-NEXUS"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-3 text-gray-400 hover:text-cyan-400 transition-all duration-300"

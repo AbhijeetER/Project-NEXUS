@@ -44,18 +44,16 @@ export default function FloatingPillNavbar() {
       animate={{ y: show ? 0 : -80, opacity: show ? 1 : 0 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
       className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999]
-                 flex items-center justify-center
-                 backdrop-blur-xl rounded-4xl"
+                 flex items-center justify-center"
     >
       <div
         ref={containerRef}
-        className="relative flex items-center justify-center 
-                   px-3 py-2 
-                   bg-white/90 border border-black/10 shadow-lg
+        className="nav-glass relative flex items-center justify-center
+                   px-3 py-2
                    rounded-full w-fit"
       >
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center gap-1 relative">
+        <ul className="hidden md:flex items-center gap-1 relative" style={{ color: 'var(--text-primary)' }}>
           {TABS.map((tab) => (
             <Tab
               key={tab}
@@ -72,7 +70,7 @@ export default function FloatingPillNavbar() {
         
           <SignedOut>
             <SignInButton mode="modal">
-              <button className="ml-3 px-4 py-2 text-sm rounded-full bg-black text-white hover:bg-black/80">
+              <button className="ml-3 px-4 py-2 text-sm rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors">
                 Signup / Login
               </button>
             </SignInButton>
@@ -84,7 +82,7 @@ export default function FloatingPillNavbar() {
               href="https://nexus-code-editor.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-3 px-4 py-2 text-sm rounded-full bg-blue-600 text-white hover:bg-blue-700"
+              className="ml-3 px-4 py-2 text-sm rounded-full bg-[#2d4a72] text-white hover:bg-[#3a5f8f] transition-colors border border-white/10"
             >
               Code Editor
             </a>
@@ -97,7 +95,7 @@ export default function FloatingPillNavbar() {
 
         <button
           onClick={() => setMobileOpen((p) => !p)}
-          className="md:hidden px-4 py-2 text-sm rounded-full bg-black text-white"
+          className="md:hidden px-4 py-2 text-sm rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors"
         >
           Menu
         </button>
@@ -109,11 +107,11 @@ export default function FloatingPillNavbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className="absolute top-full mt-2 left-1/2 -translate-x-1/2
-                       bg-white rounded-xl shadow-xl border border-black/10
-                       p-3 flex flex-col gap-2 md:hidden"
+                       rounded-xl p-3 flex flex-col gap-2 md:hidden"
+            style={{ background: 'rgba(17,24,39,0.95)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.09)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}
           >
             {TABS.map((tab) => (
-              <li key={tab} className="px-4 py-2 rounded-lg hover:bg-black/5">
+              <li key={tab} className="px-4 py-2 rounded-lg text-gray-200 hover:bg-white/8 hover:text-white transition-colors">
                 <Link
                   to={ROUTES[tab]}
                   onClick={() => setMobileOpen(false)}
@@ -129,7 +127,7 @@ export default function FloatingPillNavbar() {
                 <SignInButton mode="modal">
                   <button
                     onClick={() => setMobileOpen(false)}
-                    className="w-full px-4 py-2 rounded-lg bg-black text-white"
+                    className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors"
                   >
                     Signup / Login
                   </button>
@@ -144,7 +142,7 @@ export default function FloatingPillNavbar() {
                   href="https://nexus-code-editor.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full block px-4 py-2 rounded-lg bg-blue-600 text-white text-center hover:bg-blue-700"
+                  className="w-full block px-4 py-2 rounded-lg bg-[#2d4a72] border border-white/10 text-white text-center hover:bg-[#3a5f8f] transition-colors"
                 >
                   Code Editor
                 </a>
@@ -179,8 +177,8 @@ const Tab = ({ children, setCursor, containerRef, route }) => {
         });
       }}
       onMouseLeave={() => setCursor((prev) => ({ ...prev, opacity: 0 }))}
-      className="relative z-10 px-4 py-2 cursor-pointer 
-                 text-black text-sm font-medium hover:text-white"
+      className="relative z-10 px-4 py-2 cursor-pointer
+                 text-gray-200 text-sm font-medium hover:text-white transition-colors"
     >
       <Link to={route}>{children}</Link>
     </li>
